@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import Calendar from "react-calendar";
 import { v4 as uuidv4 } from "uuid";
-import moment from "moment/moment";
-import AddList from "./AddList";
-import EntryDeleteList from "./EntryDeleteList";
 import TodoBoard from "./TodoBoard";
 
 const todo = () => {
