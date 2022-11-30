@@ -1,6 +1,6 @@
 import Link from "next/link";
 
 const home = () => {
-  return <Link href="./todo/">ToDo</Link>;
+  return;
 };
 export default home;
