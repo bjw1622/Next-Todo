@@ -1,19 +1,21 @@
 import React from "react";
-import styled from "styled-components";
-const TodoCheckBtnSyled = styled.input`
-   {
-    width: 30px !important;
-  }
-`;
+
 const TodoCheckBtn = (props) => {
   const checkClick = () => {};
 
   return (
-    <TodoCheckBtnSyled
-      type="checkbox"
-      onChange={checkClick}
-      checked={props.check}
-    ></TodoCheckBtnSyled>
+    <>
+      <input
+        type="checkbox"
+        onChange={() => props.checkClick(props.id, props.check)}
+        checked={props.check}
+      ></input>
+      <style jsx>{`
+        input {
+          width: 30px !important;
+        }
+      `}</style>
+    </>
   );
 };
 export default TodoCheckBtn;

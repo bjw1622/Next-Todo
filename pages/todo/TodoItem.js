@@ -35,15 +35,25 @@ const HrStyle = styled.hr`
 const TodoItem = (props) => {
   return (
     <>
-      <TodoItemStyle>
-        <TodoCheckBtn />
-        <TodoItemInput> </TodoItemInput>
-        <div>
-          <TodoChangeBtn />
-          <TodoDeleteBtn />
-        </div>
-      </TodoItemStyle>
-      <HrStyle />
+      <div>
+        <TodoCheckBtn
+          id={props.id}
+          check={props.check}
+          checkClick={props.checkClick}
+        />
+        <TodoItemInput>{props.item}</TodoItemInput>
+        <TodoChangeBtn id={props.id} change={props.change} />
+        <TodoDeleteBtn id={props.id} delete={props.delete} />
+      </div>
+      <style jsx>{`
+        div {
+          width: 500px;
+          height: 50px;
+          border: 1px solid dimgray;
+          margin: 3px;
+          display: flex;
+        }
+      `}</style>
     </>
   );
 };

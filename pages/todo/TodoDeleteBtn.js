@@ -5,15 +5,6 @@ const TodoDeleteBtn = (props) => {
     if (window.confirm("삭제 하시겠습니까?")) {
     }
   };
-  return (
-    <button
-      style={{ marginTop: "6px" }}
-      variant="contained"
-      color="error"
-      onClick={() => DeleteList()}
-    >
-      삭제
-    </button>
-  );
+  return <button onClick={() => props.delete(props.id)}>삭제</button>;
 };
 export default TodoDeleteBtn;

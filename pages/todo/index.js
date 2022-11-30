@@ -7,100 +7,118 @@ import AddList from "./AddList";
 import EntryDeleteList from "./EntryDeleteList";
 import TodoBoard from "./TodoBoard";
 
-// const TodoListStyle = styled.div`
-//    {
-//     width: 512px;
-//     border-radius: 16px;
-//     box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.04);
-//     margin: 15px auto 32px auto;
-//     background: darkgray;
-//     display: flex;
-//     flex-direction: column;
-
-//     h1 {
-//       margin: 20px 0px 20px 10px;
-//       font-size: 36px;
-//       color: white;
-//     }
-
-//     input {
-//       padding: 12px;
-//       border-radius: 4px;
-//       border: 1px solid #dee2e6;
-//       width: 100%;
-//       outline: none;
-//       font-size: 18px;
-//       box-sizing: border-box;
-//     }
-
-//     button {
-//       margin: 10 auto 0 auto;
-//     }
-//   }
-// `;
 const todo = () => {
-  // const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState("");
 
-  // const [value, onChange] = useState(new Date());
+  const [todoList, setTodoList] = useState([]);
 
-  // const id = uuidv4();
+  const id = uuidv4();
 
-  // const addTodoList = () => {};
+  const addData = {
+    id,
+    inputValue,
+    check: false,
+  };
+  // 수정 method
+  const changeInput = (id) => {
+    const changeInputValue = prompt("수정 내용을 입력해주세요");
+    if (changeInputValue !== null) {
+      const findId = todoList.findIndex((todoItem) => todoItem.id === id);
+      let copyTodoList = [...todoList];
+      if (findId !== -1) {
+        copyTodoList[findId] = {
+          ...todoList[findId],
+          inputValue: changeInputValue,
+        };
+      }
+      setTodoList(copyTodoList);
+    } else if (changeInputValue.trim() !== "") {
+      alert("올바른 값을 입력해주세요.");
+    }
+  };
+  // 체크 박스 상태 method
+  const checkClick = (id, check) => {
+    const findId = todoList.findIndex((todoItem) => todoItem.id === id);
+    let copyTodoList = [...todoList];
+    if (findId !== -1) {
+      copyTodoList[findId] = { ...todoList[findId], check: !check };
+    }
+    setTodoList(copyTodoList);
+  };
 
-  // const addData = {
-  //   id,
-  //   inputValue,
-  //   check: false,
-  //   addDate: moment(value).format("DD-MM-YYYY"),
-  // };
+  const setInputVal = (e) => {
+    setInputValue(e.target.value);
+  };
 
-  // const setInputVal = (e) => {
-  //   setInputValue(e);
-  // };
+  const addItem = () => {
+    if (addData.inputValue !== null && addData.inputValue.trim() !== "") {
+      setTodoList([...todoList, addData]);
+      setInputValue("");
+    } else {
+      alert("값을 올바르게 입력해주세요");
+    }
+  };
+
+  const DeleteList = (id) => {
+    if (window.confirm("삭제 하시겠습니까?")) {
+      setTodoList(todoList.filter((todo) => todo.id !== id));
+    }
+  };
+
+  // 삭제 method
+  const DeleteTotalList = () => {
+    if (window.confirm("전체 삭제 하시겠습니까?")) {
+      setTodoList([]);
+    }
+  };
 
   return (
     <>
-      {/* <Calendar
-        onChange={onChange}
-        value={value}
-        tileClassName={({ date, view }) => {}}
-      /> */}
       <div>
-        <h1 style={{ margin: "0 auto", padding: "15px" }}>Todo List</h1>
-        <input />
-        <AddList></AddList>
-        <EntryDeleteList></EntryDeleteList>
-        <TodoBoard></TodoBoard>
+        <h1>Todo List</h1>
+        <input type="text" onChange={setInputVal} value={inputValue} />
+        <button variant="contained" onClick={addItem}>
+          추가
+        </button>
+        <button variant="contained" color="error" onClick={DeleteTotalList}>
+          전체 삭제
+        </button>
+        <TodoBoard
+          todoList={todoList}
+          delete={DeleteList}
+          change={changeInput}
+          checkClick={checkClick}
+        />
       </div>
       <style jsx>{`
-          div  {
-            width: 512px;
-            border-radius: 16px;
-            box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.04);
-            margin: 15px auto 32px auto;
-            background: darkgray;
-            display: flex;
-            flex-direction: column;
+        div {
+          width: 512px;
+          border-radius: 16px;
+          box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.04);
+          margin: 15px auto 32px auto;
+          background: darkgray;
+          display: flex;
+          flex-direction: column;
+        }
+        h1 {
+          margin: 20px 0px 20px 10px;
+          font-size: 36px;
+          color: white;
+        }
 
-            h1 {
-              margin: 20px 0px 20px 10px;
-              font-size: 36px;
-              color: white;
-            }
+        input {
+          padding: 12px;
+          border-radius: 4px;
+          border: 1px solid #dee2e6;
+          width: 100%;
+          outline: none;
+          font-size: 18px;
+          box-sizing: border-box;
+        }
 
-            input {
-              padding: 12px;
-              border-radius: 4px;
-              border: 1px solid #dee2e6;
-              width: 100%;
-              outline: none;
-              font-size: 18px;
-              box-sizing: border-box;
-            }
-
-            button {
-              margin: 10 auto 0 auto;
-            }
+        button {
+          margin: 10 auto 0 auto;
+        }
       `}</style>
     </>
   );
