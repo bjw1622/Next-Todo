@@ -18,17 +18,17 @@ app.post("/todo", function (req, res) {
   res.send(todos);
 });
 
-// app.delete("/todo", function (req, res) {
-//   const findInex = todos.find((todo) => todo.id === req.body.Id);
-//   const index = todos.indexOf(findInex);
-//   todos.splice(index, 1);
-//   res.json(todos);
-// });
+app.delete("/todo", function (req, res) {
+  const findInex = todos.find((todo) => todo.id === req.body.Id);
+  const index = todos.indexOf(findInex);
+  todos.splice(index, 1);
+  res.json(todos);
+});
 
-// app.delete("/todoEntry", function (req, res) {
-//   todos = [];
-//   res.json(todos);
-// });
+app.delete("/todoEntry", function (req, res) {
+  todos = [];
+  res.json(todos);
+});
 
 // app.put("/todoInputValue", function (req, res) {
 //   const findIndex = todos.find((todo) => todo.id === req.body.data.Id);

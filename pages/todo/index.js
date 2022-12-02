@@ -66,13 +66,15 @@ const todo = () => {
 
   const DeleteList = (id) => {
     if (window.confirm("삭제 하시겠습니까?")) {
-      setTodoList(todoList.filter((todo) => todo.id !== id));
+      // setTodoList(todoList.filter((todo) => todo.id !== id));
+      console.log(id);
+      Axios.delete("http://localhost:3001/todo", { data: { Id: id } });
     }
   };
 
   const DeleteTotalList = () => {
     if (window.confirm("전체 삭제 하시겠습니까?")) {
-      setTodoList([]);
+      Axios.delete("http://localhost:3001/todoEntry");
     }
   };
 
