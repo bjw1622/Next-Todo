@@ -37,12 +37,6 @@ const todo = () => {
   };
 
   const checkClick = (id, check) => {
-    // const findId = todoList.findIndex((todoItem) => todoItem.id === id);
-    // let copyTodoList = [...todoList];
-    // if (findId !== -1) {
-    // copyTodoList[findId] = { ...todoList[findId], check: !check };
-    // }
-    // setTodoList(copyTodoList);
     Axios.put("http://localhost:3001/todoCheckValue", { data: { Id: id } });
   };
 
