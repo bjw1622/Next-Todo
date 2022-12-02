@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import TodoBoard from "../../component/layout/todo/TodoBoard";
+const { default: Axios } = require("axios");
 
 const todo = () => {
   const [inputValue, setInputValue] = useState("");
@@ -14,7 +15,16 @@ const todo = () => {
     inputValue,
     check: false,
   };
-  // 수정 method
+
+  const getTodoList = async () => {
+    await Axios.get("http://localhost:3001/todo").then((res) => {
+      setTodoList(res.data);
+    });
+  };
+  useEffect(() => {
+    getTodoList();
+  }, [todoList]);
+
   const changeInput = (id) => {
     const changeInputValue = prompt("수정 내용을 입력해주세요");
     if (changeInputValue !== null) {
@@ -31,7 +41,7 @@ const todo = () => {
       alert("올바른 값을 입력해주세요.");
     }
   };
-  // 체크 박스 상태 method
+
   const checkClick = (id, check) => {
     const findId = todoList.findIndex((todoItem) => todoItem.id === id);
     let copyTodoList = [...todoList];
@@ -47,7 +57,7 @@ const todo = () => {
 
   const addItem = () => {
     if (addData.inputValue !== null && addData.inputValue.trim() !== "") {
-      setTodoList([...todoList, addData]);
+      Axios.post("http://localhost:3001/todo", addData);
       setInputValue("");
     } else {
       alert("값을 올바르게 입력해주세요");
@@ -60,7 +70,6 @@ const todo = () => {
     }
   };
 
-  // 삭제 method
   const DeleteTotalList = () => {
     if (window.confirm("전체 삭제 하시겠습니까?")) {
       setTodoList([]);
