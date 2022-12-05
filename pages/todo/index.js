@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import TodoBoard from "../../component/layout/todo/TodoBoard";
 const { default: Axios } = require("axios");
 
-const todo = () => {
+const todo = ({ data }) => {
   const [inputValue, setInputValue] = useState("");
 
   const [todoList, setTodoList] = useState([]);
@@ -16,20 +16,25 @@ const todo = () => {
     check: false,
   };
 
-  const getTodoList = async () => {
-    await Axios.get("http://localhost:3001/todo").then((res) => {
-      setTodoList(res.data);
-    });
-  };
+  // const getTodoList = async () => {
+  //   await Axios.get("http://localhost:3001/todo").then((res) => {
+  //     setTodoList(res.data);
+  //   });
+  // };
+
+  // //client side rendering => server side rendering
+  // // 클라이언트 페이지가
   useEffect(() => {
-    getTodoList();
-  }, [todoList]);
+    setTodoList(data);
+  }, []);
 
   const changeInput = (id) => {
     const changeInputValue = prompt("수정 내용을 입력해주세요");
     if (changeInputValue !== null) {
       Axios.put("http://localhost:3001/todoInputValue", {
         data: { Id: id, InputValue: changeInputValue },
+      }).then((res) => {
+        setTodoList(res.data);
       });
     } else if (changeInputValue.trim() !== "") {
       alert("올바른 값을 입력해주세요.");
@@ -37,16 +42,23 @@ const todo = () => {
   };
 
   const checkClick = (id, check) => {
-    Axios.put("http://localhost:3001/todoCheckValue", { data: { Id: id } });
+    Axios.put("http://localhost:3001/todoCheckValue", {
+      data: { Id: id },
+    }).then((res) => {
+      setTodoList(res.data);
+    });
   };
 
   const setInputVal = (e) => {
     setInputValue(e.target.value);
   };
 
-  const addItem = () => {
+  const addItem = async () => {
     if (addData.inputValue !== null && addData.inputValue.trim() !== "") {
-      Axios.post("http://localhost:3001/todo", addData);
+      await Axios.post("http://localhost:3001/todo", addData).then((res) => {
+        setTodoList(res.data);
+      });
+      // 여기서 post에서 return을 해주고 settodolist를 해버리면 re-rendering
       setInputValue("");
     } else {
       alert("값을 올바르게 입력해주세요");
@@ -55,13 +67,19 @@ const todo = () => {
 
   const DeleteList = (id) => {
     if (window.confirm("삭제 하시겠습니까?")) {
-      Axios.delete("http://localhost:3001/todo", { data: { Id: id } });
+      Axios.delete("http://localhost:3001/todo", { data: { Id: id } }).then(
+        (res) => {
+          setTodoList(res.data);
+        }
+      );
     }
   };
 
   const DeleteTotalList = () => {
     if (window.confirm("전체 삭제 하시겠습니까?")) {
-      Axios.delete("http://localhost:3001/todoEntry");
+      Axios.delete("http://localhost:3001/todoEntry").then((res) => {
+        setTodoList(res.data);
+      });
     }
   };
 
@@ -116,4 +134,11 @@ const todo = () => {
     </>
   );
 };
+
+export async function getServerSideProps(context) {
+  const res = await fetch(`http://localhost:3001/todo`, { method: "GET" });
+  const data = await res.json();
+  return { props: { data } };
+}
+
 export default todo;
