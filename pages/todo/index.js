@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import TodoBoard from "../../component/layout/todo/TodoBoard";
-const { default: Axios } = require("axios");
+import styles from "../../styles/index.module.scss";
+const { default: Axios, default: axios } = require("axios");
 
 const todo = ({ data }) => {
   const [inputValue, setInputValue] = useState("");
@@ -16,17 +17,8 @@ const todo = ({ data }) => {
     check: false,
   };
 
-  // const getTodoList = async () => {
-  //   await Axios.get("http://localhost:3001/todo").then((res) => {
-  //     setTodoList(res.data);
-  //   });
-  // };
-
-  // //client side rendering => server side rendering
-  // // 클라이언트 페이지가
   useEffect(() => {
     setTodoList(data);
-    // getTodoList();
   }, []);
 
   const changeInput = (id) => {
@@ -85,13 +77,27 @@ const todo = ({ data }) => {
 
   return (
     <>
-      <div>
-        <h1>Todo List</h1>
-        <input type="text" onChange={setInputVal} value={inputValue} />
-        <button variant="contained" onClick={addItem}>
+      <div className={styles.todoList}>
+        <h1 className={styles.todoTitle}>Todo List</h1>
+        <input
+          className={styles.todoInput}
+          type="text"
+          onChange={setInputVal}
+          value={inputValue}
+        />
+        <button
+          className={styles.todoBtn}
+          variant="contained"
+          onClick={addItem}
+        >
           추가
         </button>
-        <button variant="contained" color="error" onClick={DeleteTotalList}>
+        <button
+          className={styles.todoBtn}
+          variant="contained"
+          color="error"
+          onClick={DeleteTotalList}
+        >
           전체 삭제
         </button>
         <TodoBoard
@@ -101,45 +107,20 @@ const todo = ({ data }) => {
           checkClick={checkClick}
         />
       </div>
-      <style jsx>{`
-        div {
-          width: 512px;
-          border-radius: 16px;
-          box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.04);
-          margin: 15px auto 32px auto;
-          background: darkgray;
-          display: flex;
-          flex-direction: column;
-        }
-        h1 {
-          margin: 20px 0px 20px 10px;
-          font-size: 36px;
-          color: white;
-        }
-
-        input {
-          padding: 12px;
-          border-radius: 4px;
-          border: 1px solid #dee2e6;
-          width: 100%;
-          outline: none;
-          font-size: 18px;
-          box-sizing: border-box;
-        }
-
-        button {
-          margin: 10 auto 0 auto;
-        }
-      `}</style>
     </>
   );
 };
 
 // Axios(csr), getServersideProps(ssr), getStaticProps(ssg)
-// getServersideProps => build 실행 시 에러 (why?????)
-export async function getStaticProps(context) {
-  const res = await fetch(`http://localhost:3001/todo`, { method: "GET" });
-  const data = await res.json();
-  return { props: { data } };
-}
+//getStaticProps => ssg (첫 빌드시에만)
+export const getServerSideProps = async () => {
+  try {
+    const res = await Axios.get(`http://localhost:3001/todo`);
+    const data = await res.data;
+    return { props: { data } };
+  } catch (error) {
+    console.log("-----error-----");
+    return { props: {} };
+  }
+};
 export default todo;
