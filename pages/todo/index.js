@@ -26,6 +26,7 @@ const todo = ({ data }) => {
   // // 클라이언트 페이지가
   useEffect(() => {
     setTodoList(data);
+    // getTodoList();
   }, []);
 
   const changeInput = (id) => {
@@ -58,7 +59,6 @@ const todo = ({ data }) => {
       await Axios.post("http://localhost:3001/todo", addData).then((res) => {
         setTodoList(res.data);
       });
-      // 여기서 post에서 return을 해주고 settodolist를 해버리면 re-rendering
       setInputValue("");
     } else {
       alert("값을 올바르게 입력해주세요");
