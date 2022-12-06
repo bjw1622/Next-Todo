@@ -20,7 +20,8 @@
     "pm2": "^5.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "sass": "^1.56.1"
+    "sass": "^1.56.1",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "babel-plugin-styled-components": "^2.0.7",
