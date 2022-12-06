@@ -3,11 +3,10 @@ const app = express();
 var bodyParser = require("body-parser");
 var cors = require("cors");
 const { default: Axios } = require("axios");
+const { APP_PATHS_MANIFEST } = require("next/dist/shared/lib/constants");
 
 app.use(bodyParser.json({ type: "application/json" }));
-// app.use(cors({ origin: "http://localhost:3000", credentials: true }));
-app.use(cors({ origin: "http://localhost:8000", credentials: true }));
-
+app.use(cors());
 let todos = [];
 
 app.get("/todo", function (req, res) {
