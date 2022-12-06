@@ -5,7 +5,8 @@ var cors = require("cors");
 const { default: Axios } = require("axios");
 
 app.use(bodyParser.json({ type: "application/json" }));
-app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+// app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(cors({ origin: "http://localhost:8000", credentials: true }));
 
 let todos = [];
 

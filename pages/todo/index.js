@@ -135,10 +135,10 @@ const todo = ({ data }) => {
   );
 };
 
-export async function getServerSideProps(context) {
+// Axios(csr), getServersideProps(ssr), getStaticProps(ssg)
+export async function getServersideProps(context) {
   const res = await fetch(`http://localhost:3001/todo`, { method: "GET" });
   const data = await res.json();
   return { props: { data } };
 }
-
 export default todo;
