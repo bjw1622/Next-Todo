@@ -5,7 +5,7 @@ import TodoItem from "./TodoItem";
 const TodoBoard = (props) => {
   return (
     <div>
-      {/* {props.todoList.map((item) => {
+      {props.todoList.map((item) => {
         return (
           <TodoItem
             key={item.id}
@@ -17,7 +17,7 @@ const TodoBoard = (props) => {
             change={props.change}
           />
         );
-      })} */}
+      })}
     </div>
   );
 };
