@@ -3,7 +3,6 @@ import { useRouter } from "next/router";
 
 const BaseLayout = ({ children }) => {
   const router = useRouter();
-  console.log(router);
   return (
     <div>
       <ul>
