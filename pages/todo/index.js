@@ -18,7 +18,7 @@ const todo = ({ data }) => {
   };
 
   useEffect(() => {
-    setTodoList(data);
+    // setTodoList(data);
   }, []);
 
   const changeInput = (id) => {
@@ -113,14 +113,14 @@ const todo = ({ data }) => {
 
 // Axios(csr), getServersideProps(ssr), getStaticProps(ssg)
 //getStaticProps => ssg (첫 빌드시에만)
-export const getServerSideProps = async () => {
-  try {
-    const res = await Axios.get(`http://localhost:3001/todo`);
-    const data = await res.data;
-    return { props: { data } };
-  } catch (error) {
-    console.log("-----error-----");
-    return { props: {} };
-  }
-};
+// export const getServerSideProps = async () => {
+//   try {
+//     const res = await Axios.get(`http://localhost:3001/todo`);
+//     const data = await res.data;
+//     return { props: { data } };
+//   } catch (error) {
+//     console.log("-----error-----");
+//     return { props: {} };
+//   }
+// };
 export default todo;
