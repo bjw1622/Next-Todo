@@ -1,20 +1,38 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const BaseLayout = ({ children }) => {
+  const router = useRouter();
+  console.log(router);
   return (
     <div>
       <ul>
         <li>
-          <Link href={"/"}>Home</Link>
+          <Link href={"/"} className={router.pathname === "/" ? "active" : ""}>
+            Home
+          </Link>
         </li>
       </ul>
       <ul>
         <li>
-          <Link href={"/todo"}>ToDo</Link>
+          <Link
+            href={"/todo"}
+            className={router.pathname === "/todo" ? "active" : ""}
+          >
+            Todo
+          </Link>
         </li>
       </ul>
       <ul></ul>
       {children}
+      <style jsx>
+        {`
+          .active {
+            color: red;
+            font-weight: bold;
+          }
+        `}
+      </style>
     </div>
   );
 };

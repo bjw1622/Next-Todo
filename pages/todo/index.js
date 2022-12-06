@@ -136,7 +136,7 @@ const todo = ({ data }) => {
 };
 
 // Axios(csr), getServersideProps(ssr), getStaticProps(ssg)
-// getServersideProps => build 실행 시 에러
+// getServersideProps => build 실행 시 에러 (why?????)
 export async function getStaticProps(context) {
   const res = await fetch(`http://localhost:3001/todo`, { method: "GET" });
   const data = await res.json();
