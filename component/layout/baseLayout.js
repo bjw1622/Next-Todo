@@ -22,6 +22,16 @@ const BaseLayout = ({ children }) => {
           </Link>
         </li>
       </ul>
+      <ul>
+        <li>
+          <Link
+            href={"/board"}
+            className={router.pathname === "/board" ? "active" : ""}
+          >
+            Board
+          </Link>
+        </li>
+      </ul>
       <ul></ul>
       {children}
       <style jsx>
