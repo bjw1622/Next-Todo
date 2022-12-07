@@ -119,7 +119,6 @@ export const getServerSideProps = async () => {
     const data = await res.data;
     return { props: { data } };
   } catch (error) {
-    console.log("-----error-----");
     return { props: {} };
   }
 };
