@@ -1,12 +1,11 @@
 import axios from "axios";
-import "bootstrap/dist/css/bootstrap.min.css";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Table from "react-bootstrap/Table";
 import Form from "react-bootstrap/Form";
 import BoardItem from "../../component/layout/board/BoardItem";
+import Link from "next/link";
 const BoardIndex = ({ data }) => {
-  console.log({ data }.data);
   return (
     <div>
       <div>
@@ -82,7 +81,9 @@ const BoardIndex = ({ data }) => {
           4
         </Button>
       </ButtonGroup>
-      <Button variant="primary">글쓰기</Button>
+      <Link href="/board/Write">
+        <Button variant="primary">글쓰기</Button>
+      </Link>
     </div>
   );
 };
