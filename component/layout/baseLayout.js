@@ -32,7 +32,16 @@ const BaseLayout = ({ children }) => {
           </Link>
         </li>
       </ul>
-      <ul></ul>
+      <ul>
+        <li>
+          <Link
+            href={"/board/LoginBtn"}
+            className={router.pathname === "/board/LoginBtn" ? "active" : ""}
+          >
+            Google LogIn
+          </Link>
+        </li>
+      </ul>
       {children}
       <style jsx>
         {`

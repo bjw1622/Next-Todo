@@ -1,10 +1,13 @@
 import BaseLayout from "../component/layout/baseLayout";
 import "../styles/globals.scss";
-function MyApp({ Component, pageProps }) {
+import { SessionProvider } from "next-auth/react";
+function MyApp({ Component, pageProps: { session, ...pageProps } }) {
   return (
-    <BaseLayout>
-      <Component {...pageProps} />
-    </BaseLayout>
+    <SessionProvider session={session}>
+      <BaseLayout>
+        <Component {...pageProps} />
+      </BaseLayout>
+    </SessionProvider>
   );
 }
 
