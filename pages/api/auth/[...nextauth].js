@@ -1,7 +1,9 @@
+import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import KakaoProvider from "next-auth/providers/kakao";
+import { fbAuth } from "../../../javascripts/firebaseConfig";
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -30,6 +32,26 @@ export const authOptions = {
     async session({ session, token, user }) {
       session.accessToken = token.accessToken;
       return session;
+    },
+    async signIn({ user, account, profile, email, credentials }) {
+      try {
+        //account 변수에서 id_token을 가지고 google auth credential 생성
+        const googleCredential = GoogleAuthProvider.credential(
+          account?.id_token
+        );
+        //생성된 credential로 signInWithCredential 실행
+        const userCredential = await signInWithCredential(
+          fbAuth,
+          googleCredential
+        ).catch((e) => {
+          console.log(e);
+          return false; // 로그인 중 에러 발생 -> false 반환
+        });
+        return userCredential ? true : false; //로그인 성공여부 반환
+      } catch (e) {
+        console.log(e);
+        return false;
+      }
     },
   },
 };
