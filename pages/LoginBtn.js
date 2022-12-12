@@ -5,7 +5,7 @@ export default function Component() {
     console.log(session);
     return (
       <>
-        Signed in as {session.user.email} <br />
+        {session.user.name}님 환영합니다. <br />
         <button onClick={() => signOut()}>Sign out</button>
       </>
     );
