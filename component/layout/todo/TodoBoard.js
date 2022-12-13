@@ -1,8 +1,8 @@
-import moment from "moment";
 import React from "react";
 import TodoItem from "./TodoItem";
 
 const TodoBoard = (props) => {
+  console.log(props);
   return (
     <div>
       {props.todoList.map((item) => {
