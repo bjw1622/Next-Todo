@@ -3,7 +3,7 @@ import TodoItem from "./TodoItem";
 
 const TodoBoard = (props: {
   todoList: [];
-  change: {};
+  change: object;
   delete: {};
   checkClick: {};
 }) => {
