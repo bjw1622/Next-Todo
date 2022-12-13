@@ -5,11 +5,11 @@ import GoogleProvider from "next-auth/providers/google";
 import KakaoProvider from "next-auth/providers/kakao";
 import { fbAuth } from "../../../javascripts/firebaseConfig";
 
-export const authOptions = {
+export default NextAuth({
   providers: [
     GithubProvider({
       clientId: "257ac962cea6392c09df",
-      clientSecret: "b604ded6a9406793ec5dda772e3061855cdf3697",
+      clientSecret: "ab8b1a5ed78eaac8aa188deffd3d70c40c11298f",
     }),
     GoogleProvider({
       clientId:
@@ -37,6 +37,9 @@ export const authOptions = {
         const googleCredential = GoogleAuthProvider.credential(
           account?.id_token
         );
+        // console.log(googleCredential);
+        // console.log("-----------------------------------------");
+        // console.log(fbAuth);
         const userCredential = await signInWithCredential(
           fbAuth,
           googleCredential
@@ -51,5 +54,4 @@ export const authOptions = {
       }
     },
   },
-};
-export default NextAuth(authOptions);
+});
