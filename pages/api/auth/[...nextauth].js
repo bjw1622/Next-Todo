@@ -37,9 +37,6 @@ export default NextAuth({
         const googleCredential = GoogleAuthProvider.credential(
           account?.id_token
         );
-        // console.log(googleCredential);
-        // console.log("-----------------------------------------");
-        // console.log(fbAuth);
         const userCredential = await signInWithCredential(
           fbAuth,
           googleCredential
