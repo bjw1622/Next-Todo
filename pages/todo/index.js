@@ -18,21 +18,24 @@ const todo = () => {
   const [todoList, setTodoList] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const id = uuidv4();
-  const usersCollectionRef = collection(db, "todo");
-
+  const todoListCollectionCollectionRef = collection(db, "todo");
   const addData = {
     id,
     inputValue,
     check: false,
   };
 
+  const getTodos = async () => {
+    const data = await getDocs(todoListCollectionCollectionRef);
+    setTodoList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  };
+
   useEffect(() => {
-    const getTodos = async () => {
-      const data = await getDocs(usersCollectionRef);
-      setTodoList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    };
     getTodos();
   }, []);
+  useEffect(() => {
+    console.log(todoList);
+  }, [todoList]);
 
   const setInputVal = (e) => {
     setInputValue(e.target.value);
@@ -55,10 +58,12 @@ const todo = () => {
 
   const addItem = async () => {
     if (addData.inputValue !== null && addData.inputValue.trim() !== "") {
-      await addDoc(usersCollectionRef, {
+      await addDoc(todoListCollectionCollectionRef, {
         id: addData.id,
         inputValue: addData.inputValue,
         check: addData.check,
+      }).then((data) => {
+        console.log(data);
       });
       setInputValue("");
     } else {
@@ -72,11 +77,13 @@ const todo = () => {
       await deleteDoc(todoDoc);
     }
   };
-
-  const DeleteTotalList = async () => {
+  // 모든 문서 삭제하는 방법??
+  const DeleteTotalList = () => {
     if (window.confirm("전체 삭제 하시겠습니까?")) {
-      const todoDoc = doc(db, "todo");
-      console.log(todoDoc);
+      todoList.map((item) => {
+        deleteDoc(doc(db, "todo", item.id));
+      });
+      setTodoList([]);
     }
   };
 
