@@ -1,4 +1,4 @@
-const home = () => {
+function App() {
   return;
-};
-export default home;
+}
+export default App;
