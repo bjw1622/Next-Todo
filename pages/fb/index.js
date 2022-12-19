@@ -8,10 +8,11 @@ const Index = () => {
   useEffect(() => {
     const getUsers = async () => {
       const data = await getDocs(usersCollectionRef);
-      console.log(data.docs);
+      setUsers(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
     };
     getUsers();
   }, []);
+  console.log(users);
   return <div></div>;
 };
 export default Index;

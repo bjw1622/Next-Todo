@@ -2,14 +2,25 @@ import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import TodoBoard from "../../component/layout/todo/TodoBoard";
 import styles from "../../styles/index.module.scss";
+
+//firestore
+import { db } from "../../javascripts/firebaseConfig";
+import { collection, getDocs } from "firebase/firestore";
 const { default: Axios, default: axios } = require("axios");
 
-const todo = ({ data }) => {
-  const [inputValue, setInputValue] = useState("");
-
+const todo = () => {
   const [todoList, setTodoList] = useState([]);
-
+  const [inputValue, setInputValue] = useState("");
   const id = uuidv4();
+
+  const usersCollectionRef = collection(db, "todo");
+  useEffect(() => {
+    const getTodos = async () => {
+      const data = await getDocs(usersCollectionRef);
+      setTodoList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+    getTodos();
+  }, []);
 
   const addData = {
     id,
@@ -18,7 +29,7 @@ const todo = ({ data }) => {
   };
 
   useEffect(() => {
-    setTodoList(data);
+    // setTodoList(data);
   }, []);
 
   const changeInput = (id) => {
@@ -113,13 +124,13 @@ const todo = ({ data }) => {
 
 // Axios(csr), getServersideProps(ssr), getStaticProps(ssg)
 // getStaticProps => ssg (첫 빌드시에만)
-export const getServerSideProps = async () => {
-  try {
-    const res = await Axios.get(`http://localhost:3001/todo`);
-    const data = await res.data;
-    return { props: { data } };
-  } catch (error) {
-    return { props: {} };
-  }
-};
+// export const getServerSideProps = async () => {
+//   try {
+//     const res = await Axios.get(`http://localhost:3001/todo`);
+//     const data = await res.data;
+//     return { props: { data } };
+//   } catch (error) {
+//     return { props: {} };
+//   }
+// };
 export default todo;
