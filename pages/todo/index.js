@@ -14,7 +14,6 @@ import {
 } from "firebase/firestore";
 
 const todo = () => {
-  const { default: Axios, default: axios } = require("axios");
   const [todoList, setTodoList] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const id = uuidv4();
@@ -33,9 +32,7 @@ const todo = () => {
   useEffect(() => {
     getTodos();
   }, []);
-  useEffect(() => {
-    console.log(todoList);
-  }, [todoList]);
+  useEffect(() => {}, [todoList]);
 
   const setInputVal = (e) => {
     setInputValue(e.target.value);
@@ -46,6 +43,7 @@ const todo = () => {
     if (changeInputValue !== null) {
       const todoDoc = doc(db, "todo", id);
       await updateDoc(todoDoc, { inputValue: changeInputValue });
+      getTodos();
     } else if (changeInputValue.trim() !== "") {
       alert("올바른 값을 입력해주세요.");
     }
@@ -54,6 +52,7 @@ const todo = () => {
   const checkClick = async (id, check) => {
     const todoDoc = doc(db, "todo", id);
     await updateDoc(todoDoc, { check: !check });
+    getTodos();
   };
 
   const addItem = async () => {
@@ -62,10 +61,9 @@ const todo = () => {
         id: addData.id,
         inputValue: addData.inputValue,
         check: addData.check,
-      }).then((data) => {
-        console.log(data);
       });
       setInputValue("");
+      getTodos();
     } else {
       alert("값을 올바르게 입력해주세요");
     }
@@ -75,9 +73,9 @@ const todo = () => {
     if (window.confirm("삭제 하시겠습니까?")) {
       const todoDoc = doc(db, "todo", id);
       await deleteDoc(todoDoc);
+      getTodos();
     }
   };
-  // 모든 문서 삭제하는 방법??
   const DeleteTotalList = () => {
     if (window.confirm("전체 삭제 하시겠습니까?")) {
       todoList.map((item) => {
