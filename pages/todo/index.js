@@ -2,25 +2,23 @@ import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import TodoBoard from "../../component/layout/todo/TodoBoard";
 import styles from "../../styles/index.module.scss";
-
 //firestore
 import { db } from "../../javascripts/firebaseConfig";
-import { collection, getDocs } from "firebase/firestore";
-const { default: Axios, default: axios } = require("axios");
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 
 const todo = () => {
+  const { default: Axios, default: axios } = require("axios");
   const [todoList, setTodoList] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const id = uuidv4();
-
   const usersCollectionRef = collection(db, "todo");
-  useEffect(() => {
-    const getTodos = async () => {
-      const data = await getDocs(usersCollectionRef);
-      setTodoList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    };
-    getTodos();
-  }, []);
 
   const addData = {
     id,
@@ -29,38 +27,38 @@ const todo = () => {
   };
 
   useEffect(() => {
-    // setTodoList(data);
+    const getTodos = async () => {
+      const data = await getDocs(usersCollectionRef);
+      setTodoList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+    getTodos();
   }, []);
-
-  const changeInput = (id) => {
-    const changeInputValue = prompt("수정 내용을 입력해주세요");
-    if (changeInputValue !== null) {
-      Axios.put("http://localhost:3001/todoInputValue", {
-        data: { Id: id, InputValue: changeInputValue },
-      }).then((res) => {
-        setTodoList(res.data);
-      });
-    } else if (changeInputValue.trim() !== "") {
-      alert("올바른 값을 입력해주세요.");
-    }
-  };
-
-  const checkClick = (id, check) => {
-    Axios.put("http://localhost:3001/todoCheckValue", {
-      data: { Id: id },
-    }).then((res) => {
-      setTodoList(res.data);
-    });
-  };
 
   const setInputVal = (e) => {
     setInputValue(e.target.value);
   };
 
+  const changeInput = async (id) => {
+    const changeInputValue = prompt("수정 내용을 입력해주세요");
+    if (changeInputValue !== null) {
+      const todoDoc = doc(db, "todo", id);
+      await updateDoc(todoDoc, { inputValue: changeInputValue });
+    } else if (changeInputValue.trim() !== "") {
+      alert("올바른 값을 입력해주세요.");
+    }
+  };
+
+  const checkClick = async (id, check) => {
+    const todoDoc = doc(db, "todo", id);
+    await updateDoc(todoDoc, { check: !check });
+  };
+
   const addItem = async () => {
     if (addData.inputValue !== null && addData.inputValue.trim() !== "") {
-      await Axios.post("http://localhost:3001/todo", addData).then((res) => {
-        setTodoList(res.data);
+      await addDoc(usersCollectionRef, {
+        id: addData.id,
+        inputValue: addData.inputValue,
+        check: addData.check,
       });
       setInputValue("");
     } else {
@@ -68,21 +66,17 @@ const todo = () => {
     }
   };
 
-  const DeleteList = (id) => {
+  const DeleteList = async (id) => {
     if (window.confirm("삭제 하시겠습니까?")) {
-      Axios.delete("http://localhost:3001/todo", { data: { Id: id } }).then(
-        (res) => {
-          setTodoList(res.data);
-        }
-      );
+      const todoDoc = doc(db, "todo", id);
+      await deleteDoc(todoDoc);
     }
   };
 
-  const DeleteTotalList = () => {
+  const DeleteTotalList = async () => {
     if (window.confirm("전체 삭제 하시겠습니까?")) {
-      Axios.delete("http://localhost:3001/todoEntry").then((res) => {
-        setTodoList(res.data);
-      });
+      const todoDoc = doc(db, "todo");
+      console.log(todoDoc);
     }
   };
 
@@ -122,15 +116,4 @@ const todo = () => {
   );
 };
 
-// Axios(csr), getServersideProps(ssr), getStaticProps(ssg)
-// getStaticProps => ssg (첫 빌드시에만)
-// export const getServerSideProps = async () => {
-//   try {
-//     const res = await Axios.get(`http://localhost:3001/todo`);
-//     const data = await res.data;
-//     return { props: { data } };
-//   } catch (error) {
-//     return { props: {} };
-//   }
-// };
 export default todo;
