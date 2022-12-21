@@ -13,7 +13,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
-const todo = () => {
+const Todo = () => {
   const [todoList, setTodoList] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const id = uuidv4();
@@ -121,4 +121,4 @@ const todo = () => {
   );
 };
 
-export default todo;
+export default Todo;
