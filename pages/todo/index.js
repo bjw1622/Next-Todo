@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import TodoBoard from "../../component/layout/todo/TodoBoard";
 import styles from "../../styles/index.module.scss";
-//firestore
 import { db } from "../../javascripts/firebaseConfig";
 import {
   addDoc,
@@ -55,18 +54,24 @@ const Todo = () => {
     getTodos();
   };
 
-  const addItem = async () => {
-    if (addData.inputValue !== null && addData.inputValue.trim() !== "") {
-      await addDoc(todoListCollectionCollectionRef, {
-        id: addData.id,
-        inputValue: addData.inputValue,
-        check: addData.check,
-      });
-      setInputValue("");
-      getTodos();
-    } else {
-      alert("값을 올바르게 입력해주세요");
-    }
+  const addItem = () => {
+    // if (addData.inputValue !== null && addData.inputValue.trim() !== "") {
+    //   await addDoc(todoListCollectionCollectionRef, {
+    //     // id: addData.id,
+    //     // inputValue: addData.inputValue,
+    //     // check: addData.check,
+    //   }).then((res) => {
+    //     console.log(res);
+    //     console.log(res.id);
+    //   });
+    //   setInputValue("");
+    //   getTodos();
+    // } else {
+    //   alert("값을 올바르게 입력해주세요");
+    // }
+    fetch("/api/todo").then((res) => {
+      console.log(res.json());
+    });
   };
 
   const DeleteList = async (id) => {
