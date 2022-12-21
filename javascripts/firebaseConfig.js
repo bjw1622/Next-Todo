@@ -6,7 +6,7 @@ import { getFirestore } from "firebase/firestore";
 const firebaseConfig = {
   apiKey: "AIzaSyBc6sMf-h5sd8N9TuF_2M3s8xOhLPtof4w",
   authDomain: "nextauth-pratice.firebaseapp.com",
-  // databaseURL: "https://nextauth-pratice-default-rtdb.firebaseio.com",
+  databaseURL: "https://nextauth-pratice-default-rtdb.firebaseio.com",
   projectId: "nextauth-pratice",
   storageBucket: "nextauth-pratice.appspot.com",
   messagingSenderId: "313275721428",

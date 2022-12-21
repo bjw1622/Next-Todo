@@ -33,14 +33,6 @@ const BaseLayout = ({ children }) => {
           LogIn
         </Link>
       </li>
-      <li>
-        <Link
-          href={"/fb"}
-          className={router.pathname.includes("/fb") ? "active" : ""}
-        >
-          FireBase Test
-        </Link>
-      </li>
       {children}
     </>
   );
