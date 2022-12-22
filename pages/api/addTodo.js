@@ -1,14 +1,7 @@
 import { db } from "../../javascripts/firebaseConfig";
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  updateDoc,
-} from "firebase/firestore";
+import { addDoc, collection } from "firebase/firestore";
 
-export default async function handler(req, res) {
+export default async function addTodo(req, res) {
   const todoListCollectionCollectionRef = collection(db, "todo");
   if (req.method === "POST") {
     console.log(req.body);
