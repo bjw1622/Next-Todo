@@ -7,21 +7,21 @@ import {
   getDocs,
   updateDoc,
 } from "firebase/firestore";
+
 export default async function handler(req, res) {
   const todoListCollectionCollectionRef = collection(db, "todo");
-
   if (req.method === "POST") {
-    // Process a POST request
-  } else {
+    console.log(req.body);
     try {
       await addDoc(todoListCollectionCollectionRef, {
-        // id: addData.id,
-        // inputValue: addData.inputValue,
-        // check: addData.check,
+        id: req.body.id,
+        inputValue: req.body.inputValue,
+        check: req.body.check,
       });
-      res.status(200).json({ data: "111" });
+      res.status(200).json(req.body);
     } catch (error) {
       console.log(error);
     }
+  } else {
   }
 }
