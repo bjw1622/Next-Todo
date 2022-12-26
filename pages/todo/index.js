@@ -12,7 +12,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
-const Todo = () => {
+const Todo = ({ data }) => {
   const [todoList, setTodoList] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const id = uuidv4();
@@ -24,9 +24,25 @@ const Todo = () => {
   };
 
   const getTodos = async () => {
-    const data = await getDocs(todoListCollectionCollectionRef);
-    setTodoList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    await fetch("/api/getTodo", {
+      method: "GET",
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((json) => {
+        // console.log(json.data());
+        console.log(json);
+      });
   };
+  // const getTodos = async () => {
+  //   const data = await getDocs(todoListCollectionCollectionRef);
+  //   console.log(data.docs);
+  //   data.docs.map((doc) => {
+  //     console.log(doc.data());
+  //   });
+  //   setTodoList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  // };
 
   useEffect(() => {
     getTodos();
@@ -54,24 +70,24 @@ const Todo = () => {
     getTodos();
   };
 
-  const addItem = () => {
-    // if (addData.inputValue !== null && addData.inputValue.trim() !== "") {
-    //   await addDoc(todoListCollectionCollectionRef, {
-    //     // id: addData.id,
-    //     // inputValue: addData.inputValue,
-    //     // check: addData.check,
-    //   }).then((res) => {
-    //     console.log(res);
-    //     console.log(res.id);
-    //   });
-    //   setInputValue("");
-    //   getTodos();
-    // } else {
-    //   alert("값을 올바르게 입력해주세요");
-    // }
-    fetch("/api/todo").then((res) => {
-      console.log(res.json());
-    });
+  const addItem = async () => {
+    await fetch("/api/addTodo", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: addData.id,
+        inputValue: addData.inputValue,
+        check: addData.check,
+      }),
+    })
+      .then((res) => console.log(res.json()))
+      .then((data) => {
+        console.log(data);
+      });
+    setInputValue("");
+    getTodos();
   };
 
   const DeleteList = async (id) => {
@@ -81,6 +97,7 @@ const Todo = () => {
       getTodos();
     }
   };
+
   const DeleteTotalList = () => {
     if (window.confirm("전체 삭제 하시겠습니까?")) {
       todoList.map((item) => {
@@ -89,7 +106,6 @@ const Todo = () => {
       setTodoList([]);
     }
   };
-
   return (
     <>
       <div className={styles.todoList}>
@@ -125,5 +141,17 @@ const Todo = () => {
     </>
   );
 };
+
+// export const getServerSideProps = async () => {
+//   try {
+//     const res = await getDocs(todoListCollectionCollectionRef);
+//     console.log(res);
+//     // const data = await res.data;
+//     // console.log(data);
+//     return { props: { data } };
+//   } catch (error) {
+//     return { props: {} };
+//   }
+// };
 
 export default Todo;

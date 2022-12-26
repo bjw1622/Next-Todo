@@ -4,7 +4,6 @@ import { addDoc, collection } from "firebase/firestore";
 export default async function addTodo(req, res) {
   const todoListCollectionCollectionRef = collection(db, "todo");
   if (req.method === "POST") {
-    console.log(req.body);
     try {
       await addDoc(todoListCollectionCollectionRef, {
         id: req.body.id,
