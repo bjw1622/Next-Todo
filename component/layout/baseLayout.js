@@ -19,14 +19,6 @@ const BaseLayout = ({ children }) => {
       </li>
       <li>
         <Link
-          href={"/board"}
-          className={router.pathname.includes("/board") ? "active" : ""}
-        >
-          Board
-        </Link>
-      </li>
-      <li>
-        <Link
           href={"/LoginBtn"}
           className={router.pathname.includes("/LoginBtn") ? "active" : ""}
         >
