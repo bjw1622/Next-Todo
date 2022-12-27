@@ -3,16 +3,9 @@ import { v4 as uuidv4 } from "uuid";
 import TodoBoard from "../../component/layout/todo/TodoBoard";
 import styles from "../../styles/index.module.scss";
 import { db } from "../../javascripts/firebaseConfig";
-import {
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  updateDoc,
-} from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
 
-const Todo = ({ data }) => {
+const Todo = () => {
   const [todoList, setTodoList] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const id = uuidv4();
@@ -23,27 +16,26 @@ const Todo = ({ data }) => {
     check: false,
   };
 
-  const getTodos = async () => {
-    await fetch("/api/getTodo", {
-      method: "GET",
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((json) => {
-        // console.log(json.data());
-        console.log(json);
-      });
-  };
   // const getTodos = async () => {
-  //   const data = await getDocs(todoListCollectionCollectionRef);
-  //   console.log(data.docs);
-  //   data.docs.map((doc) => {
-  //     console.log(doc.data());
-  //   });
-  //   setTodoList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  //   await fetch("/api/getTodo", {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   })
+  //     .then((res) => {
+  //       console.log(res);
+  //       return res.json();
+  //     })
+  //     .then((json) => {
+  //       console.log(json);
+  //       // setTodoList(json.map((doc) => ({ ...doc.data(), id: doc.id })));
+  //     });
   // };
-
+  const getTodos = async () => {
+    const data = await getDocs(todoListCollectionCollectionRef);
+    setTodoList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  };
   useEffect(() => {
     getTodos();
   }, []);
@@ -56,36 +48,52 @@ const Todo = ({ data }) => {
   const changeInput = async (id) => {
     const changeInputValue = prompt("수정 내용을 입력해주세요");
     if (changeInputValue !== null) {
-      const todoDoc = doc(db, "todo", id);
-      await updateDoc(todoDoc, { inputValue: changeInputValue });
-      getTodos();
+      await fetch("/api/inputChangeTodo", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: id,
+          inputValue: changeInputValue,
+        }),
+      });
     } else if (changeInputValue.trim() !== "") {
       alert("올바른 값을 입력해주세요.");
     }
-  };
-
-  const checkClick = async (id, check) => {
-    const todoDoc = doc(db, "todo", id);
-    await updateDoc(todoDoc, { check: !check });
     getTodos();
   };
 
-  const addItem = async () => {
-    await fetch("/api/addTodo", {
+  const checkClick = async (id, check) => {
+    await fetch("/api/checkChangeTodo", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        id: addData.id,
-        inputValue: addData.inputValue,
-        check: addData.check,
+        id: id,
+        check: check,
       }),
-    })
-      .then((res) => console.log(res.json()))
-      .then((data) => {
-        console.log(data);
+    });
+    getTodos();
+  };
+
+  const addItem = async () => {
+    if (addData.inputValue.trim() !== "") {
+      await fetch("/api/addTodo", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: addData.id,
+          inputValue: addData.inputValue,
+          check: addData.check,
+        }),
       });
+    } else {
+      alert("올바른 값을 입력해주세요");
+    }
     setInputValue("");
     getTodos();
   };
@@ -98,14 +106,28 @@ const Todo = ({ data }) => {
     }
   };
 
-  const DeleteTotalList = () => {
+  const DeleteTotalList = async () => {
     if (window.confirm("전체 삭제 하시겠습니까?")) {
-      todoList.map((item) => {
-        deleteDoc(doc(db, "todo", item.id));
-      });
+      await fetch("/api/deleteTotalTodo", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          todoList: todoList,
+        }),
+      })
+        .then((data) => {
+          console.log(data);
+          return data.json();
+        })
+        .then((data) => {
+          console.log(data);
+        });
       setTodoList([]);
     }
   };
+
   return (
     <>
       <div className={styles.todoList}>
