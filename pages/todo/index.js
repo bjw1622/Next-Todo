@@ -5,31 +5,23 @@ import styles from "../../styles/index.module.scss";
 import { db } from "../../javascripts/firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-
+import Router from "next/router";
 const Todo = () => {
   const todoListCollectionCollectionRef = collection(db, "todo");
-
   const { data } = useSession();
-  if (data) {
-    console.log(data);
-  } else {
-    const router = useRouter();
-    alert("로그인 해주세요");
-    router.push({ pathname: "/LoginBtn" });
-  }
   const [todoList, setTodoList] = useState([]);
-
   const [inputValue, setInputValue] = useState("");
-
   const id = uuidv4();
-
   const addData = {
     id,
     inputValue,
     check: false,
   };
-
+  if (data === null) {
+    alert("로그인 해주세요.");
+    Router.push("/LoginBtn");
+    return;
+  }
   // const getTodos = async () => {
   //   await fetch("/api/getTodo", {
   //     method: "GET",
