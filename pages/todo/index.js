@@ -3,13 +3,27 @@ import { v4 as uuidv4 } from "uuid";
 import TodoBoard from "../../component/layout/todo/TodoBoard";
 import styles from "../../styles/index.module.scss";
 import { db } from "../../javascripts/firebaseConfig";
-import { collection, deleteDoc, doc, getDocs } from "firebase/firestore";
+import { collection, getDocs } from "firebase/firestore";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 
 const Todo = () => {
-  const [todoList, setTodoList] = useState([]);
-  const [inputValue, setInputValue] = useState("");
-  const id = uuidv4();
   const todoListCollectionCollectionRef = collection(db, "todo");
+
+  const { data } = useSession();
+  if (data) {
+    console.log(data);
+  } else {
+    const router = useRouter();
+    alert("로그인 해주세요");
+    router.push({ pathname: "/LoginBtn" });
+  }
+  const [todoList, setTodoList] = useState([]);
+
+  const [inputValue, setInputValue] = useState("");
+
+  const id = uuidv4();
+
   const addData = {
     id,
     inputValue,
@@ -24,21 +38,24 @@ const Todo = () => {
   //     },
   //   })
   //     .then((res) => {
-  //       console.log(res);
   //       return res.json();
   //     })
   //     .then((json) => {
-  //       console.log(json);
-  //       // setTodoList(json.map((doc) => ({ ...doc.data(), id: doc.id })));
+  //       json.map((doc) => {
+  //         console.log(doc.data());
+  //       });
   //     });
   // };
+
   const getTodos = async () => {
     const data = await getDocs(todoListCollectionCollectionRef);
     setTodoList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
   };
+
   useEffect(() => {
     getTodos();
   }, []);
+
   useEffect(() => {}, [todoList]);
 
   const setInputVal = (e) => {
@@ -58,7 +75,7 @@ const Todo = () => {
           inputValue: changeInputValue,
         }),
       });
-    } else if (changeInputValue.trim() !== "") {
+    } else {
       alert("올바른 값을 입력해주세요.");
     }
     getTodos();
@@ -100,8 +117,22 @@ const Todo = () => {
 
   const DeleteList = async (id) => {
     if (window.confirm("삭제 하시겠습니까?")) {
-      const todoDoc = doc(db, "todo", id);
-      await deleteDoc(todoDoc);
+      await fetch("/api/deleteTodo", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: id,
+        }),
+      })
+        .then((data) => {
+          console.log(data);
+          return data.json();
+        })
+        .then((data) => {
+          console.log(data);
+        });
       getTodos();
     }
   };
@@ -164,16 +195,11 @@ const Todo = () => {
   );
 };
 
-// export const getServerSideProps = async () => {
-//   try {
-//     const res = await getDocs(todoListCollectionCollectionRef);
-//     console.log(res);
-//     // const data = await res.data;
-//     // console.log(data);
-//     return { props: { data } };
-//   } catch (error) {
-//     return { props: {} };
-//   }
-// };
+// export async function getServerSideProps() {
+//   const todoListCollectionCollectionRef = collection(db, "todo");
+//   const data = await getDocs(todoListCollectionCollectionRef);
+//   console.log(data.docs);
+//   return { props: { data } };
+// }
 
 export default Todo;
