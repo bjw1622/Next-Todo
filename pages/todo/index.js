@@ -1,19 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import TodoBoard from "../../component/layout/todo/TodoBoard";
 import styles from "../../styles/index.module.scss";
-import { db } from "../../javascripts/firebaseConfig";
-import { collection, getDocs } from "firebase/firestore";
 import { useSession } from "next-auth/react";
 import Router from "next/router";
-const Todo = () => {
-  const todoListCollectionCollectionRef = collection(db, "todo");
+const Todo = ({ resData }) => {
   const { data } = useSession();
   const [todoList, setTodoList] = useState([]);
   const [inputValue, setInputValue] = useState("");
-  const id = uuidv4();
   const addData = {
-    id,
     inputValue,
     check: false,
   };
@@ -22,30 +16,23 @@ const Todo = () => {
     Router.push("/LoginBtn");
     return;
   }
-  // const getTodos = async () => {
-  //   await fetch("/api/getTodo", {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //   })
-  //     .then((res) => {
-  //       return res.json();
-  //     })
-  //     .then((json) => {
-  //       json.map((doc) => {
-  //         console.log(doc.data());
-  //       });
-  //     });
-  // };
-
   const getTodos = async () => {
-    const data = await getDocs(todoListCollectionCollectionRef);
-    setTodoList(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    await fetch("/api/getTodo", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setTodoList(data.map((doc) => ({ ...doc, id: doc.id })));
+      });
   };
 
   useEffect(() => {
-    getTodos();
+    setTodoList(resData.map((doc) => ({ ...doc, id: doc.id })));
   }, []);
 
   useEffect(() => {}, [todoList]);
@@ -95,7 +82,6 @@ const Todo = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          id: addData.id,
           inputValue: addData.inputValue,
           check: addData.check,
         }),
@@ -187,11 +173,22 @@ const Todo = () => {
   );
 };
 
-// export async function getServerSideProps() {
-//   const todoListCollectionCollectionRef = collection(db, "todo");
-//   const data = await getDocs(todoListCollectionCollectionRef);
-//   console.log(data.docs);
-//   return { props: { data } };
-// }
+export async function getServerSideProps() {
+  let resData;
+  await fetch("http://localhost:3000/api/getTodo", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      resData = data;
+      return data;
+    });
+  return { props: { resData } };
+}
 
 export default Todo;

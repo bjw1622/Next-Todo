@@ -6,7 +6,6 @@ export default async function addTodo(req, res) {
   if (req.method === "POST") {
     try {
       await addDoc(todoListCollectionCollectionRef, {
-        id: req.body.id,
         inputValue: req.body.inputValue,
         check: req.body.check,
       });
