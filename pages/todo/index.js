@@ -17,7 +17,7 @@ const Todo = ({ resData }) => {
     return;
   }
   const getTodos = async () => {
-    await fetch("/api/getTodo", {
+    await fetch("/api/todo", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -76,7 +76,7 @@ const Todo = ({ resData }) => {
 
   const addItem = async () => {
     if (addData.inputValue.trim() !== "") {
-      await fetch("/api/addTodo", {
+      await fetch("/api/todo", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -175,7 +175,7 @@ const Todo = ({ resData }) => {
 
 export async function getServerSideProps() {
   let resData;
-  await fetch("http://localhost:3000/api/getTodo", {
+  await fetch("http://localhost:3000/api/todo", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
