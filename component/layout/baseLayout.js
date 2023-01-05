@@ -25,6 +25,14 @@ const BaseLayout = ({ children }) => {
           LogIn
         </Link>
       </li>
+      <li>
+        <Link
+          href={"/imageBtn"}
+          className={router.pathname.includes("/imageBtn") ? "active" : ""}
+        >
+          imageBtn
+        </Link>
+      </li>
       {children}
     </>
   );
