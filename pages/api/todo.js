@@ -11,17 +11,14 @@ import {
 export default async function Todo(req, res) {
   if (req.method === "GET") {
     try {
-      console.log(req.query);
-      // emaildata 정보 어떻게??
       const querySnapshot = await getDocs(collection(db, req.query.emailData));
-      // data 유효성체크 null
       const data = [];
       querySnapshot.forEach((doc) => {
         data.push({ ...doc.data(), id: doc.id });
       });
       res.status(200).json(data);
     } catch (error) {
-      console.log(error);
+      res.status(400).json();
     }
   } else if (req.method === "POST") {
     try {

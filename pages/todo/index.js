@@ -2,39 +2,36 @@ import { getSession, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import TodoBoard from "../../component/layout/todo/TodoBoard";
 import styles from "../../styles/index.module.scss";
-const Todo = () => {
+
+const Todo = ({ resData }) => {
   const axios = require("axios");
+  const { data } = useSession();
   const [todoList, setTodoList] = useState([]);
+
   const [inputValue, setInputValue] = useState("");
+
   const addData = {
     inputValue,
     check: false,
   };
-  const { data } = useSession();
-  let email;
-  if (data) {
-    email = data.user.email;
-    console.log(email);
-  }
-  console.log(email);
-  const getTodos = async () => {
-    await axios
-      .get("/api/todo", {
-        params: { emailData: "bjw1622@gmail.com", testData: email },
-      })
-      .then((res) => {
-        setTodoList(res.data.map((doc) => ({ ...doc, id: doc.id })));
-      });
-  };
 
   useEffect(() => {
-    getTodos();
+    setTodoList(resData.map((doc) => ({ ...doc, id: doc.id })));
   }, []);
-
   useEffect(() => {}, [todoList]);
 
   const setInputVal = (e) => {
     setInputValue(e.target.value);
+  };
+
+  const getTodos = async () => {
+    await axios
+      .get("/api/todo", {
+        params: { emailData: data.user.email },
+      })
+      .then((res) => {
+        setTodoList(res.data.map((doc) => ({ ...doc, id: doc.id })));
+      });
   };
 
   const changeInput = async (id) => {
@@ -127,7 +124,6 @@ const Todo = () => {
           emailData: data.user.email,
         }),
       });
-
       setTodoList([]);
     }
   };
@@ -167,25 +163,25 @@ const Todo = () => {
     </>
   );
 };
-// export async function getServerSideProps() {
-//   let resData;
-//   getSession().then((data) => {
-//     console.log(data);
-//   });
-//   await fetch("http://localhost:3000/api/todo", {
-//     method: "GET",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   })
-//     .then((res) => {
-//       return res.json();
-//     })
-//     .then((data) => {
-//       resData = data;
-//       return data;
-//     });
-//   return { props: { resData } };
-// }
+export async function getServerSideProps(ctx) {
+  const sessionData = await getSession(ctx);
+  if (sessionData) {
+    const axios = require("axios");
+    const res = await axios.get("http://localhost:3000/api/todo", {
+      params: {
+        emailData: sessionData.user.email,
+      },
+    });
+    const resData = res.data;
+    return { props: { resData: resData } };
+  }
+  return {
+    redirect: {
+      permanent: false,
+      destination: "/LoginBtn",
+    },
+    props: {},
+  };
+}
 
 export default Todo;
