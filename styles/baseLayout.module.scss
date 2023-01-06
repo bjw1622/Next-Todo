@@ -1,0 +1,12 @@
+.baseLayout {
+  display: flex;
+  list-style: none;
+  justify-content: space-around;
+  align-items: center;
+  background-color: white;
+  color: black;
+  height: 60px;
+}
+.baseLi :hover {
+  font-size: large;
+}
