@@ -1,8 +1,12 @@
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signIn, signOut, getSession } from "next-auth/react";
 export default function Component() {
   const { data } = useSession();
   if (data) {
-    console.log(data);
+    // getSession().then((data) => {
+    //   console.log(data.user.email);
+    // });
+    console.log(data.user.name);
+
     return (
       <>
         <span style={{ backgroundImage: `url(${data.user.image})` }}></span>
