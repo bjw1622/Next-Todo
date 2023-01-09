@@ -3,7 +3,7 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import styles from "../../styles/baseLayout.module.scss";
-import firebaseApp from "../../javascripts/firebaseConfig";
+import db from "../../javascripts/firebaseConfig";
 import { useState } from "react";
 
 const BaseLayout = ({ children }) => {
@@ -11,7 +11,7 @@ const BaseLayout = ({ children }) => {
   const [profileImg, setProfileImg] = useState("");
   const { data } = useSession();
   if (data) {
-    const storage = getStorage(firebaseApp);
+    const storage = getStorage(db);
     const imageRef = ref(storage, `images/${data.user.email}`);
     getDownloadURL(ref(imageRef)).then((url) => {
       setProfileImg(url);
