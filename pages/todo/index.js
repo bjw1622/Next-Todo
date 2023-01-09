@@ -163,6 +163,7 @@ const Todo = ({ resData }) => {
     </>
   );
 };
+
 export async function getServerSideProps(ctx) {
   const sessionData = await getSession(ctx);
   if (sessionData) {
@@ -178,7 +179,7 @@ export async function getServerSideProps(ctx) {
   return {
     redirect: {
       permanent: false,
-      destination: "/LoginBtn",
+      destination: "/",
     },
     props: {},
   };
