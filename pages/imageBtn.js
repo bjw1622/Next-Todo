@@ -6,7 +6,7 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { firebaseApp } from "../javascripts/firebaseConfig";
 
 const imageBtn = () => {
