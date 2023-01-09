@@ -18,7 +18,7 @@ export default async function Todo(req, res) {
       });
       res.status(200).json(data);
     } catch (error) {
-      res.status(400).json();
+      res.status(404).json();
     }
   } else if (req.method === "POST") {
     try {
@@ -34,7 +34,7 @@ export default async function Todo(req, res) {
       // catch return
       res.status(200).json(req.body);
     } catch (error) {
-      console.log(error);
+      res.status(404).json();
     }
   } else if (req.method === "DELETE") {
     try {
@@ -42,7 +42,7 @@ export default async function Todo(req, res) {
       await deleteDoc(todoDoc);
       res.status(200).json({ data: todoDoc });
     } catch (error) {
-      console.log(error);
+      res.status(404).json();
     }
   } else if (req.method === "PUT") {
     try {
@@ -50,7 +50,7 @@ export default async function Todo(req, res) {
       await updateDoc(todoDoc, { inputValue: req.body.inputValue });
       res.status(200).json(req.body);
     } catch (error) {
-      console.log(error);
+      res.status(404).json();
     }
   }
 }
