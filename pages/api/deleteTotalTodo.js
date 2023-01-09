@@ -10,7 +10,7 @@ export default function deleteTotalTodo(req, res) {
       });
       res.status(200).json({ data: a });
     } catch (error) {
-      console.log(error);
+      res.status(404).json();
     }
   }
 }

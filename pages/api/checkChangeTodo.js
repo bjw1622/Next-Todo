@@ -8,8 +8,7 @@ export default async function checkChangeTodo(req, res) {
       await updateDoc(todoDoc, { check: !req.body.check });
       res.status(200).json(req.body);
     } catch (error) {
-      console.log(error);
+      res.status(404).json();
     }
-  } else {
   }
 }

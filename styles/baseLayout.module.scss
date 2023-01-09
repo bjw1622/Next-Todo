@@ -10,3 +10,19 @@
 .baseLi :hover {
   font-size: large;
 }
+.profileImg {
+  width: 32px;
+  border-radius: 20px;
+  margin-right: 5px;
+  background-color: grey;
+  color: white;
+}
+.logIn {
+  display: flex;
+  align-items: center;
+}
+#profileId {
+  display: inline;
+  color: cornflowerblue;
+  text-decoration: underline;
+}
