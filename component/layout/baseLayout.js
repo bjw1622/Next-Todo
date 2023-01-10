@@ -74,8 +74,7 @@ const BaseLayout = ({ children }) => {
         </li>
         <div>
           <button
-            onClick={(e) => {
-              e.preventDefault();
+            onClick={() => {
               signIn();
             }}
           >
