@@ -36,5 +36,5 @@
     "babel-plugin-styled-components": "^2.0.7",
     "eslint-config-next": "^13.0.6"
   },
-  "proxy": "http://board-www.board.com"
+  "proxy": "https://nexttodolist.vercel.app/"
 }
