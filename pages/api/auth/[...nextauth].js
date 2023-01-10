@@ -27,10 +27,10 @@ export default NextAuth({
     //   }
     //   return token;
     // },
-    async session({ session, token, user }) {
-      session.accessToken = token.accessToken;
-      return session;
-    },
+    // async session({ session, token, user }) {
+    //   session.accessToken = token.accessToken;
+    //   return session;
+    // },
     async signIn({ user, account, profile, email, credentials }) {
       try {
         const googleCredential = GoogleAuthProvider.credential(
@@ -50,5 +50,4 @@ export default NextAuth({
       }
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
 });
