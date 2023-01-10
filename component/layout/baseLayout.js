@@ -73,7 +73,14 @@ const BaseLayout = ({ children }) => {
           </Link>
         </li>
         <div>
-          <button onClick={() => signIn()}>Sign in</button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              signIn();
+            }}
+          >
+            Sign in
+          </button>
         </div>
       </div>
       {children}
