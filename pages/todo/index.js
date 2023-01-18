@@ -168,10 +168,8 @@ export async function getServerSideProps(ctx) {
   const sessionData = await getSession(ctx);
   if (sessionData) {
     const axios = require("axios");
-    const res = await axios.get("http://localhost:3000/api/todo", {
-      params: {
-        emailData: sessionData.user.email,
-      },
+    const res = await axios.get("https://next-todo-psi.vercel.app/api/todo", {
+      params: { emailData: sessionData.user.email },
     });
     const resData = res.data;
     return { props: { resData: resData } };
