@@ -1,11 +1,8 @@
-import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import KakaoProvider from "next-auth/providers/kakao";
-import { fbAuth } from "../../../javascripts/firebaseConfig";
-
-export default NextAuth({
+export const authOptions = {
   providers: [
     GithubProvider({
       clientId: "257ac962cea6392c09df",
@@ -21,25 +18,6 @@ export default NextAuth({
       clientSecret: "5acgT51YvTUGi2x9DxyCzAvQyusZPa4o",
     }),
   ],
-  // callbacks: {
-  //   async signIn({ user, account, profile, email, credentials }) {
-  //     try {
-  //       const googleCredential = GoogleAuthdkProvider.credential(
-  //         account?.id_token
-  //       );
-  //       const userCredential = await signInWithCredential(
-  //         fbAuth,
-  //         googleCredential
-  //       ).catch((e) => {
-  //         console.log(e);
-  //         return false;
-  //       });
-  //       return userCredential ? true : false;
-  //     } catch (e) {
-  //       console.log(e);
-  //       return false;
-  //     }
-  //   },
-  // },
   secret: process.env.NEXTAUTH_SECRET,
-});
+};
+export default NextAuth(authOptions);
