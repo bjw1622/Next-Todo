@@ -9,7 +9,7 @@ import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { firebaseApp } from "../javascripts/firebaseConfig";
 
-const imageBtn = () => {
+const ImageBtn = () => {
   const [imageUpload, setImageUpload] = useState(null);
   const { data } = useSession();
   const storage = getStorage(firebaseApp);
@@ -54,4 +54,4 @@ const imageBtn = () => {
   );
 };
 
-export default imageBtn;
+export default ImageBtn;
