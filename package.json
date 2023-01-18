@@ -35,6 +35,5 @@
   "devDependencies": {
     "babel-plugin-styled-components": "^2.0.7",
     "eslint-config-next": "^13.0.6"
-  },
-  "proxy": "https://nexttodolist.vercel.app/"
+  }
 }
