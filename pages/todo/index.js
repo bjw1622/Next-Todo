@@ -17,6 +17,11 @@ const Todo = ({ resData }) => {
 
   useEffect(() => {}, [todoList]);
 
+  useEffect(() => {
+    setLoading(true);
+    setTodoList(resData.map((doc) => ({ ...doc, id: doc.id })));
+    setLoading(false);
+  }, []);
   const setInputVal = (e) => {
     setInputValue(e.target.value);
   };
