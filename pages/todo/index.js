@@ -36,6 +36,7 @@ const Todo = ({ resData }) => {
   const changeInput = async (id) => {
     const changeInputValue = prompt("수정 내용을 입력해주세요");
     if (changeInputValue !== null) {
+      setLoading(true);
       await fetch("/api/todo", {
         method: "PUT",
         headers: {
@@ -47,6 +48,7 @@ const Todo = ({ resData }) => {
           emailData: data.user.email,
         }),
       });
+      setLoading(false);
     } else {
       alert("올바른 값을 입력해주세요.");
     }
@@ -54,6 +56,7 @@ const Todo = ({ resData }) => {
   };
 
   const checkClick = async (id, check) => {
+    setLoading(true);
     await fetch("/api/checkChangeTodo", {
       method: "PUT",
       headers: {
@@ -65,11 +68,13 @@ const Todo = ({ resData }) => {
         emailData: data.user.email,
       }),
     });
+    setLoading(false);
     getTodos();
   };
 
   const addItem = async () => {
     if (addData.inputValue.trim() !== "") {
+      setLoading(true);
       await fetch("/api/todo", {
         method: "POST",
         headers: {
@@ -81,6 +86,7 @@ const Todo = ({ resData }) => {
           emailData: data.user.email,
         }),
       });
+      setLoading(false);
     } else {
       alert("올바른 값을 입력해주세요");
     }
@@ -90,6 +96,7 @@ const Todo = ({ resData }) => {
 
   const DeleteList = async (id) => {
     if (window.confirm("삭제 하시겠습니까?")) {
+      setLoading(true);
       await fetch("/api/todo", {
         method: "DELETE",
         headers: {
@@ -107,12 +114,14 @@ const Todo = ({ resData }) => {
         .then((data) => {
           console.log(data);
         });
+      setLoading(false);
       getTodos();
     }
   };
 
   const DeleteTotalList = async () => {
     if (window.confirm("전체 삭제 하시겠습니까?")) {
+      setLoading(true);
       await fetch("/api/deleteTotalTodo", {
         method: "DELETE",
         headers: {
@@ -123,6 +132,7 @@ const Todo = ({ resData }) => {
           emailData: data.user.email,
         }),
       });
+      setLoading(false);
       setTodoList([]);
     }
   };
