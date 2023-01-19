@@ -1,5 +1,5 @@
 import { getSession, useSession } from "next-auth/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import TodoBoard from "../../component/layout/todo/TodoBoard";
 import styles from "../../styles/index.module.scss";
 import Loading from "../../component/common/Loading";
@@ -18,9 +18,7 @@ const Todo = ({ resData }) => {
   useEffect(() => {}, [todoList]);
 
   useEffect(() => {
-    setLoading(true);
     setTodoList(resData.map((doc) => ({ ...doc, id: doc.id })));
-    setLoading(false);
   }, []);
   const setInputVal = (e) => {
     setInputValue(e.target.value);
@@ -141,7 +139,6 @@ const Todo = ({ resData }) => {
       setTodoList([]);
     }
   };
-
   return (
     <>
       {loading ? <Loading /> : null}
