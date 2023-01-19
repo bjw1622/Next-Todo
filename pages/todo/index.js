@@ -2,22 +2,19 @@ import { getSession, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import TodoBoard from "../../component/layout/todo/TodoBoard";
 import styles from "../../styles/index.module.scss";
+import Loading from "../../component/common/Loading";
 
 const Todo = ({ resData }) => {
   const axios = require("axios");
   const { data } = useSession();
   const [todoList, setTodoList] = useState([]);
-
   const [inputValue, setInputValue] = useState("");
-
   const addData = {
     inputValue,
     check: false,
   };
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    setTodoList(resData.map((doc) => ({ ...doc, id: doc.id })));
-  }, []);
   useEffect(() => {}, [todoList]);
 
   const setInputVal = (e) => {
@@ -25,6 +22,7 @@ const Todo = ({ resData }) => {
   };
 
   const getTodos = async () => {
+    setLoading(true);
     await axios
       .get("/api/todo", {
         params: { emailData: data.user.email },
@@ -32,6 +30,7 @@ const Todo = ({ resData }) => {
       .then((res) => {
         setTodoList(res.data.map((doc) => ({ ...doc, id: doc.id })));
       });
+    setLoading(false);
   };
 
   const changeInput = async (id) => {
@@ -130,6 +129,7 @@ const Todo = ({ resData }) => {
 
   return (
     <>
+      {loading ? <Loading /> : null}
       <div className={styles.todoList}>
         <h1 className={styles.todoTitle}>Todo List</h1>
         <input
