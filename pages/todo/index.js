@@ -14,6 +14,7 @@ const Todo = ({ resData }) => {
     check: false,
   };
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     setTodoList(resData.map((doc) => ({ ...doc, id: doc.id })));
   }, []);
@@ -22,9 +23,9 @@ const Todo = ({ resData }) => {
     setInputValue(e.target.value);
   };
 
-  const getTodos = () => {
+  const getTodos = async () => {
     setLoading(true);
-    axios
+    await axios
       .get("/api/todo", {
         params: { emailData: data.user.email },
       })
@@ -34,11 +35,11 @@ const Todo = ({ resData }) => {
     setLoading(false);
   };
 
-  const changeInput = (id) => {
+  const changeInput = async (id) => {
     const changeInputValue = prompt("수정 내용을 입력해주세요");
     if (changeInputValue !== null) {
       setLoading(true);
-      fetch("/api/todo", {
+      await fetch("/api/todo", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -56,9 +57,9 @@ const Todo = ({ resData }) => {
     getTodos();
   };
 
-  const checkClick = (id, check) => {
+  const checkClick = async (id, check) => {
     setLoading(true);
-    fetch("/api/checkChangeTodo", {
+    await fetch("/api/checkChangeTodo", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -73,10 +74,10 @@ const Todo = ({ resData }) => {
     getTodos();
   };
 
-  const addItem = () => {
+  const addItem = async () => {
     if (addData.inputValue.trim() !== "") {
       setLoading(true);
-      fetch("/api/todo", {
+      await fetch("/api/todo", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -95,10 +96,10 @@ const Todo = ({ resData }) => {
     getTodos();
   };
 
-  const DeleteList = (id) => {
+  const DeleteList = async (id) => {
     if (window.confirm("삭제 하시겠습니까?")) {
       setLoading(true);
-      fetch("/api/todo", {
+      await fetch("/api/todo", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -120,10 +121,10 @@ const Todo = ({ resData }) => {
     }
   };
 
-  const DeleteTotalList = () => {
+  const DeleteTotalList = async () => {
     if (window.confirm("전체 삭제 하시겠습니까?")) {
       setLoading(true);
-      fetch("/api/deleteTotalTodo", {
+      await fetch("/api/deleteTotalTodo", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -176,6 +177,7 @@ const Todo = ({ resData }) => {
 
 export async function getServerSideProps(ctx) {
   const sessionData = await getSession(ctx);
+  console.log(sessionData);
   if (sessionData) {
     const axios = require("axios");
     const res = await axios.get("https://next-todo-psi.vercel.app/api/todo", {
