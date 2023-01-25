@@ -1,5 +1,5 @@
 import { getSession, useSession } from "next-auth/react";
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useState } from "react";
 import TodoBoard from "../../component/layout/todo/TodoBoard";
 import styles from "../../styles/index.module.scss";
 import Loading from "../../component/common/Loading";
@@ -177,7 +177,6 @@ const Todo = ({ resData }) => {
 
 export async function getServerSideProps(ctx) {
   const sessionData = await getSession(ctx);
-  console.log(sessionData);
   if (sessionData) {
     const axios = require("axios");
     const res = await axios.get("https://next-todo-psi.vercel.app/api/todo", {
