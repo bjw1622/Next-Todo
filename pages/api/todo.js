@@ -30,8 +30,6 @@ export default async function Todo(req, res) {
         inputValue: req.body.inputValue,
         check: req.body.check,
       });
-      // 값 전달 true or false
-      // catch return
       res.status(200).json(req.body);
     } catch (error) {
       res.status(404).json();
