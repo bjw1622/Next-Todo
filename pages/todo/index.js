@@ -108,14 +108,9 @@ const Todo = ({ resData }) => {
           id: id,
           emailData: data.user.email,
         }),
-      })
-        .then((data) => {
-          console.log(data);
-          return data.json();
-        })
-        .then((data) => {
-          console.log(data);
-        });
+      }).then((data) => {
+        return data.json();
+      });
       setLoading(false);
       getTodos();
     }
