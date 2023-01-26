@@ -6,12 +6,21 @@ import {
   doc,
   getDocs,
   updateDoc,
+  serverTimestamp,
+  query,
+  orderBy,
 } from "firebase/firestore";
 
-export default async function Todo(req, res) {
+const Todo = async (req, res) => {
   if (req.method === "GET") {
     try {
-      const querySnapshot = await getDocs(collection(db, req.query.emailData));
+      const todoListCollectionCollectionRef = collection(
+        db,
+        req.query.emailData
+      );
+      const querySnapshot = await getDocs(
+        query(todoListCollectionCollectionRef, orderBy("created"))
+      );
       const data = [];
       querySnapshot.forEach((doc) => {
         data.push({ ...doc.data(), id: doc.id });
@@ -29,6 +38,7 @@ export default async function Todo(req, res) {
       await addDoc(todoListCollectionCollectionRef, {
         inputValue: req.body.inputValue,
         check: req.body.check,
+        created: serverTimestamp(),
       });
       res.status(200).json(req.body);
     } catch (error) {
@@ -51,4 +61,5 @@ export default async function Todo(req, res) {
       res.status(404).json();
     }
   }
-}
+};
+export default Todo;
