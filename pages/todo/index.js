@@ -143,6 +143,12 @@ const Todo = ({ resData }) => {
           type="text"
           onChange={setInputVal}
           value={inputValue}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              setInputValue(event.target.value);
+              addItem();
+            }
+          }}
         />
         <button
           className={styles.todoBtn}
